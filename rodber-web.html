@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodber Admin - Panel Web Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #F5F5F5;
+            overflow-x: hidden;
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2E7D32 0%, #1B5E20 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 5px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.8);
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border-left: 4px solid #FDD835;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FDD835;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1B5E20;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-title {
+            font-size: 28px;
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #2E7D32;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1B5E20;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2E7D32;
+            border: 2px solid #2E7D32;
+        }
+
+        .btn-secondary:hover {
+            background: #E8F5E9;
+        }
+
+        .btn-danger {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #B71C1C;
+        }
+
+        .notification-icon {
+            position: relative;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 18px;
+            height: 18px;
+            background: #D32F2F;
+            border-radius: 50%;
+            font-size: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* CONTENT AREA */
+        .content-area {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .content-area.active {
+            display: block;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stat-card.green::before { background: #2E7D32; }
+        .stat-card.yellow::before { background: #FDD835; }
+        .stat-card.blue::before { background: #1976D2; }
+        .stat-card.orange::before { background: #FF9800; }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            opacity: 0.2;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+        }
+
+        .stat-trend {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trend-positive {
+            color: #4CAF50;
+        }
+
+        .trend-negative {
+            color: #D32F2F;
+        }
+
+        .trend-icon {
+            font-weight: bold;
+        }
+
+        /* CHARTS SECTION */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1A1A1A;
+        }
+
+        .chart-filter {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid #E0E0E0;
+            background: white;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: #2E7D32;
+            color: #2E7D32;
+        }
+
+        .filter-btn.active {
+            background: #2E7D32;
+            color: white;
+            border-color: #2E7D32;
+        }
+
+        .chart-placeholder {
+            height: 280px;
+            background: linear-gradient(to top, #E8F5E9 0%, #FFFFFF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 20px;
+            position: relative;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            gap: 4px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-bars-pair {
+            display: flex;
+            gap: 6px;
+            align-items: flex-end;
+        }
+
+        .chart-bar {
+            width: 30px;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .chart-bar.ingreso {
+            background: #2E7D32;
+        }
+
+        .chart-bar.gasto {
+            background: #D32F2F;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.05);
+        }
+
+        .chart-bar-label {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .chart-pie {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .pie-visual {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #2E7D32 0deg 140deg,
+                #FDD835 140deg 250deg,
+                #FF9800 250deg 320deg,
+                #1976D2 320deg 360deg
+            );
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .pie-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-label {
+            font-size: 13px;
+            color: #666;
+            flex: 1;
+        }
+
+        .legend-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1A1A1A;
+        }
+
+        /* TABLE */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1A1A1A;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            background: #F5F5F5;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #F5F5F5;
+        }
+
+        th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #F5F5F5;
+            font-size: 14px;
+            color: #1A1A1A;
+        }
+
+        tbody tr {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: #F9F9F9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-warning {
+            background: #FFF9C4;
+            color: #F57C00;
+        }
+
+        .badge-info {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .badge-admin {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-tech {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .table-footer {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #E0E0E0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            border-color: #2E7D32;
+            color: #2E7D32;
+        }
+
+        .page-btn.active {
+            background: #2E7D32;
+            color: white;
+            border-color: #2E7D32;
+        }
+
+        /* FILTER SECTION */
+        .filter-section {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .filter-input, .filter-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #2E7D32;
+        }
+
+        /* EXPENSE ROW */
+        .expense-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expense-amount {
+            font-weight: bold;
+            color: #D32F2F;
+            font-size: 16px;
+        }
+
+        /* USER CARDS */
+        .user-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .user-card-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
+        .user-card-info {
+            flex: 1;
+        }
+
+        .user-card-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .user-card-username {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .user-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #E0E0E0;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .icon-btn:hover {
+            background: #F5F5F5;
+        }
+
+        /* REPORT SECTION */
+        .report-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .summary-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5F5F5;
+            font-size: 15px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 16px;
+            margin-top: 8px;
+            border-top: 2px solid #2E7D32;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: bold;
+        }
+
+        .summary-value.positive {
+            color: #4CAF50;
+        }
+
+        .summary-value.negative {
+            color: #D32F2F;
+        }
+
+        .summary-value.total {
+            font-size: 20px;
+            color: #2E7D32;
+        }
+
+        /* CONFIG SECTION */
+        .config-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        .config-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 16px;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .config-item:last-child {
+            border-bottom: none;
+        }
+
+        .config-label {
+            font-size: 14px;
+            color: #1A1A1A;
+        }
+
+        .config-description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: #E0E0E0;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #2E7D32;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtext {
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🚜</div>
+            <div class="logo-text">Rodber</div>
+            <div class="logo-subtitle">Panel Administrativo</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-item active" onclick="showView('dashboard')">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="showView('bitacoras')">
+                <span class="nav-icon">📋</span>
+                <span>Bitácoras</span>
+            </div>
+            <div class="nav-item" onclick="showView('gastos')">
+                <span class="nav-icon">💰</span>
+                <span>Gastos</span>
+            </div>
+            <div class="nav-item" onclick="showView('reportes')">
+                <span class="nav-icon">📈</span>
+                <span>Reportes</span>
+            </div>
+            <div class="nav-item" onclick="showView('usuarios')">
+                <span class="nav-icon">👥</span>
+                <span>Usuarios</span>
+            </div>
+            <div class="nav-item" onclick="showView('configuracion')">
+                <span class="nav-icon">⚙️</span>
+                <span>Configuración</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">RA</div>
+                <div class="user-details">
+                    <div class="user-name">Roberto Admin</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- HEADER -->
+        <header class="header" id="header">
+            <div>
+                <h1 class="header-title" id="header-title">📊 Dashboard</h1>
+                <p class="header-subtitle" id="header-subtitle">Febrero 2026 - Vista General del Negocio</p>
+            </div>
+            <div class="header-actions" id="header-actions">
+                <div class="notification-icon">
+                    🔔
+                    <span class="notification-badge">3</span>
+                </div>
+                <button class="header-btn btn-secondary">
+                    📥 Exportar
+                </button>
+                <button class="header-btn btn-primary" onclick="window.location.href='menu.html'">
+                    🔄 Regresar al menú
+                </button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD VIEW -->
+        <div class="content-area active" id="view-dashboard">
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Bitácoras</div>
+                            <div class="stat-value">47</div>
+                        </div>
+                        <div class="stat-icon">📋</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span class="trend-icon">↗</span>
+                        <span>+12% vs mes anterior</span>
+                    </div>
+                </div>
+
+                <div class="stat-card yellow">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Ingresos Totales</div>
+                            <div class="stat-value">$487K</div>
+                        </div>
+                        <div class="stat-icon">💰</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span class="trend-icon">↗</span>
+                        <span>+8% vs mes anterior</span>
+                    </div>
+                </div>
+
+                <div class="stat-card blue">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Hectáreas</div>
+                            <div class="stat-value">342</div>
+                        </div>
+                        <div class="stat-icon">📏</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span class="trend-icon">↗</span>
+                        <span>+15% vs mes anterior</span>
+                    </div>
+                </div>
+
+                <div class="stat-card orange">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Gastos Totales</div>
+                            <div class="stat-value">$125K</div>
+                        </div>
+                        <div class="stat-icon">📉</div>
+                    </div>
+                    <div class="stat-trend trend-negative">
+                        <span class="trend-icon">↗</span>
+                        <span>+5% vs mes anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL STATS ROW -->
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Utilidad Neta</div>
+                            <div class="stat-value">$362K</div>
+                        </div>
+                        <div class="stat-icon">💹</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span>Margen: 74.3%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card blue">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Ticket Promedio</div>
+                            <div class="stat-value">$10.4K</div>
+                        </div>
+                        <div class="stat-icon">🎫</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span>$487K / 47 bitácoras</span>
+                    </div>
+                </div>
+
+                <div class="stat-card yellow">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">$/Hectárea Prom.</div>
+                            <div class="stat-value">$1,424</div>
+                        </div>
+                        <div class="stat-icon">🌾</div>
+                    </div>
+                    <div class="stat-trend trend-positive">
+                        <span>$487K / 342 hectáreas</span>
+                    </div>
+                </div>
+
+                <div class="stat-card orange">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Pendientes Firma</div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="stat-icon">⏳</div>
+                    </div>
+                    <div class="stat-trend trend-negative">
+                        <span>11% del total</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHARTS -->
+            <div class="charts-grid">
+                <!-- Ingresos vs Gastos (MEJORADO: Ambas barras) -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">💰 Ingresos vs Gastos</h3>
+                        <div class="chart-filter">
+                            <button class="filter-btn">3M</button>
+                            <button class="filter-btn active">6M</button>
+                            <button class="filter-btn">1A</button>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 100px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$420K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 60px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$108K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Sep</div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 130px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$465K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 70px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$115K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Oct</div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 90px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$385K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 55px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$98K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Nov</div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 150px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$512K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 80px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$130K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Dic</div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 170px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$563K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 90px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$142K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Ene</div>
+                        </div>
+                        <div class="chart-bar-group">
+                            <div class="chart-bars-pair">
+                                <div class="chart-bar ingreso" style="height: 140px;">
+                                    <div class="chart-bar-value" style="color: #2E7D32;">$487K</div>
+                                </div>
+                                <div class="chart-bar gasto" style="height: 75px;">
+                                    <div class="chart-bar-value" style="color: #D32F2F;">$125K</div>
+                                </div>
+                            </div>
+                            <div class="chart-bar-label">Feb</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bitácoras del Mes -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📅 Bitácoras de Febrero (por semana)</h3>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div class="chart-bar" style="height: 30%; background: #1976D2;">
+                            <div class="chart-bar-value" style="color: #1976D2;">8</div>
+                            <div class="chart-bar-label">Sem 1</div>
+                        </div>
+                        <div class="chart-bar" style="height: 50%; background: #1976D2;">
+                            <div class="chart-bar-value" style="color: #1976D2;">12</div>
+                            <div class="chart-bar-label">Sem 2</div>
+                        </div>
+                        <div class="chart-bar" style="height: 70%; background: #1976D2;">
+                            <div class="chart-bar-value" style="color: #1976D2;">15</div>
+                            <div class="chart-bar-label">Sem 3</div>
+                        </div>
+                        <div class="chart-bar" style="height: 50%; background: #1976D2;">
+                            <div class="chart-bar-value" style="color: #1976D2;">12</div>
+                            <div class="chart-bar-label">Sem 4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparativa Mensual -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📊 Tendencia Anual (12 meses)</h3>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div class="chart-bar" style="height: 45%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">35</div>
+                            <div class="chart-bar-label">Mar</div>
+                        </div>
+                        <div class="chart-bar" style="height: 50%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">38</div>
+                            <div class="chart-bar-label">Abr</div>
+                        </div>
+                        <div class="chart-bar" style="height: 55%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">41</div>
+                            <div class="chart-bar-label">May</div>
+                        </div>
+                        <div class="chart-bar" style="height: 60%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">44</div>
+                            <div class="chart-bar-label">Jun</div>
+                        </div>
+                        <div class="chart-bar" style="height: 65%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">47</div>
+                            <div class="chart-bar-label">Jul</div>
+                        </div>
+                        <div class="chart-bar" style="height: 70%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">50</div>
+                            <div class="chart-bar-label">Ago</div>
+                        </div>
+                        <div class="chart-bar" style="height: 55%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">38</div>
+                            <div class="chart-bar-label">Sep</div>
+                        </div>
+                        <div class="chart-bar" style="height: 65%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">42</div>
+                            <div class="chart-bar-label">Oct</div>
+                        </div>
+                        <div class="chart-bar" style="height: 50%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">35</div>
+                            <div class="chart-bar-label">Nov</div>
+                        </div>
+                        <div class="chart-bar" style="height: 75%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">51</div>
+                            <div class="chart-bar-label">Dic</div>
+                        </div>
+                        <div class="chart-bar" style="height: 85%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">58</div>
+                            <div class="chart-bar-label">Ene</div>
+                        </div>
+                        <div class="chart-bar" style="height: 70%; background: #FF9800;">
+                            <div class="chart-bar-value" style="color: #FF9800;">47</div>
+                            <div class="chart-bar-label">Feb</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top 10 Clientes -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">🏆 Top 10 Clientes por Facturación</h3>
+                    </div>
+                    <div class="chart-pie">
+                        <div class="pie-visual"></div>
+                        <div class="pie-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #2E7D32;"></div>
+                                <span class="legend-label">Pablo López T.</span>
+                                <span class="legend-value">$68K</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #FDD835;"></div>
+                                <span class="legend-label">Juan González</span>
+                                <span class="legend-value">$52K</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #FF9800;"></div>
+                                <span class="legend-label">María Contreras</span>
+                                <span class="legend-value">$45K</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #1976D2;"></div>
+                                <span class="legend-label">Otros (7 clientes)</span>
+                                <span class="legend-value">$322K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA DE ÚLTIMAS BITÁCORAS -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">📋 Últimas 10 Bitácoras</h3>
+                    <div class="table-actions">
+                        <div class="search-box">
+                            <span>🔍</span>
+                            <input type="text" placeholder="Buscar...">
+                        </div>
+                        <button class="header-btn btn-secondary" onclick="showView('bitacoras')">Ver Todas</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fecha</th>
+                            <th>Productor</th>
+                            <th>Predio</th>
+                            <th>Hectáreas</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#0047</strong></td>
+                            <td>12/02/2026</td>
+                            <td>Pablo López Torres</td>
+                            <td>Parcela Norte</td>
+                            <td>7.5</td>
+                            <td><strong>$13,500</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0046</strong></td>
+                            <td>11/02/2026</td>
+                            <td>Juan González</td>
+                            <td>El Naranjo</td>
+                            <td>5.2</td>
+                            <td><strong>$9,360</strong></td>
+                            <td><span class="badge badge-warning">⏳ Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0045</strong></td>
+                            <td>11/02/2026</td>
+                            <td>María Contreras</td>
+                            <td>La Esperanza</td>
+                            <td>12.0</td>
+                            <td><strong>$21,600</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0044</strong></td>
+                            <td>10/02/2026</td>
+                            <td>Roberto Sánchez</td>
+                            <td>Los Mangos</td>
+                            <td>8.5</td>
+                            <td><strong>$15,300</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0043</strong></td>
+                            <td>10/02/2026</td>
+                            <td>Ana Rodríguez</td>
+                            <td>Campo Verde</td>
+                            <td>6.8</td>
+                            <td><strong>$12,240</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    <span>Mostrando 5 de 47 registros</span>
+                    <div class="pagination">
+                        <button class="page-btn">←</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">...</button>
+                        <button class="page-btn">10</button>
+                        <button class="page-btn">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BITACORAS VIEW -->
+        <div class="content-area" id="view-bitacoras">
+            <!-- FILTERS -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label class="filter-label">🔍 Buscar</label>
+                    <input type="text" class="filter-input" placeholder="Productor, predio...">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Estado</label>
+                    <select class="filter-select">
+                        <option>Todas</option>
+                        <option>Firmadas</option>
+                        <option>Pendientes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Fecha Desde</label>
+                    <input type="date" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Fecha Hasta</label>
+                    <input type="date" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <button class="header-btn btn-primary">Filtrar</button>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">📋 Todas las Bitácoras (47)</h3>
+                    <div class="table-actions">
+                        <button class="header-btn btn-secondary">📥 Exportar Excel</button>
+                        <button class="header-btn btn-primary">+ Nueva Bitácora</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fecha</th>
+                            <th>Productor</th>
+                            <th>Localidad</th>
+                            <th>Predio</th>
+                            <th>Hectáreas</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#0047</strong></td>
+                            <td>12/02/2026</td>
+                            <td>Pablo López Torres</td>
+                            <td>Bermejo, Veracruz</td>
+                            <td>Parcela Norte</td>
+                            <td>7.5</td>
+                            <td><strong>$13,500</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0046</strong></td>
+                            <td>11/02/2026</td>
+                            <td>Juan González</td>
+                            <td>Los Mangos, Veracruz</td>
+                            <td>El Naranjo</td>
+                            <td>5.2</td>
+                            <td><strong>$9,360</strong></td>
+                            <td><span class="badge badge-warning">⏳ Pendiente</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0045</strong></td>
+                            <td>11/02/2026</td>
+                            <td>María Contreras</td>
+                            <td>San Miguel, Veracruz</td>
+                            <td>La Esperanza</td>
+                            <td>12.0</td>
+                            <td><strong>$21,600</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0044</strong></td>
+                            <td>10/02/2026</td>
+                            <td>Roberto Sánchez</td>
+                            <td>Playa Vicente, Veracruz</td>
+                            <td>Los Mangos</td>
+                            <td>8.5</td>
+                            <td><strong>$15,300</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0043</strong></td>
+                            <td>10/02/2026</td>
+                            <td>Ana Rodríguez</td>
+                            <td>Cosamaloapan, Veracruz</td>
+                            <td>Campo Verde</td>
+                            <td>6.8</td>
+                            <td><strong>$12,240</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0042</strong></td>
+                            <td>09/02/2026</td>
+                            <td>Luis Martínez</td>
+                            <td>Tierra Blanca, Veracruz</td>
+                            <td>El Porvenir</td>
+                            <td>10.5</td>
+                            <td><strong>$18,900</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0041</strong></td>
+                            <td>09/02/2026</td>
+                            <td>Carmen Flores</td>
+                            <td>Acayucan, Veracruz</td>
+                            <td>Las Flores</td>
+                            <td>4.2</td>
+                            <td><strong>$7,560</strong></td>
+                            <td><span class="badge badge-warning">⏳ Pendiente</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0040</strong></td>
+                            <td>08/02/2026</td>
+                            <td>Jorge Ramírez</td>
+                            <td>Coatzacoalcos, Veracruz</td>
+                            <td>Santa Rosa</td>
+                            <td>15.0</td>
+                            <td><strong>$27,000</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0039</strong></td>
+                            <td>08/02/2026</td>
+                            <td>Patricia Morales</td>
+                            <td>Minatitlán, Veracruz</td>
+                            <td>Los Pinos</td>
+                            <td>9.3</td>
+                            <td><strong>$16,740</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#0038</strong></td>
+                            <td>07/02/2026</td>
+                            <td>Fernando Ortiz</td>
+                            <td>Tres Valles, Veracruz</td>
+                            <td>El Progreso</td>
+                            <td>11.8</td>
+                            <td><strong>$21,240</strong></td>
+                            <td><span class="badge badge-success">✅ Firmada</span></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Ver</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    <span>Mostrando 10 de 47 registros</span>
+                    <div class="pagination">
+                        <button class="page-btn">←</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn">→</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS VIEW -->
+        <div class="content-area" id="view-gastos">
+            <!-- SUMMARY CARD -->
+            <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="stat-card orange">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Gastos (Feb)</div>
+                            <div class="stat-value">$125K</div>
+                        </div>
+                        <div class="stat-icon">💰</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>25.7% de los ingresos</span>
+                    </div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Costo Directo</div>
+                            <div class="stat-value">$45K</div>
+                        </div>
+                        <div class="stat-icon">🧪</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>36% del total</span>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Variable + Fijo</div>
+                            <div class="stat-value">$80K</div>
+                        </div>
+                        <div class="stat-icon">📊</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>64% del total</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTERS -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label class="filter-label">Categoría</label>
+                    <select class="filter-select">
+                        <option>Todas</option>
+                        <option>Costo Directo</option>
+                        <option>Variable</option>
+                        <option>Fijo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Tipo de Gasto</label>
+                    <select class="filter-select">
+                        <option>Todos</option>
+                        <option>Insumos/Proveedores</option>
+                        <option>Combustible</option>
+                        <option>Mantenimiento</option>
+                        <option>Nómina</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Mes</label>
+                    <select class="filter-select">
+                        <option>Febrero 2026</option>
+                        <option>Enero 2026</option>
+                        <option>Diciembre 2025</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="header-btn btn-primary">+ Nuevo Gasto</button>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">💰 Gastos de Febrero 2026</h3>
+                    <div class="table-actions">
+                        <button class="header-btn btn-secondary">📥 Exportar</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Proveedor</th>
+                            <th>Monto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>11/02/2026</td>
+                            <td>Insumos/Proveedores</td>
+                            <td><span class="badge badge-warning">DIRECTO</span></td>
+                            <td>Compra de fertilizantes</td>
+                            <td>Agroquímicos del Sur</td>
+                            <td><strong class="expense-amount">-$45,200</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>10/02/2026</td>
+                            <td>Combustible</td>
+                            <td><span class="badge badge-info">VARIABLE</span></td>
+                            <td>Combustible para aplicaciones</td>
+                            <td>Gasolinera Central</td>
+                            <td><strong class="expense-amount">-$18,500</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>09/02/2026</td>
+                            <td>Mantenimiento</td>
+                            <td><span class="badge badge-info">VARIABLE</span></td>
+                            <td>Mantenimiento de avioneta</td>
+                            <td>Taller Aeronáutico VER</td>
+                            <td><strong class="expense-amount">-$12,300</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>08/02/2026</td>
+                            <td>Nómina</td>
+                            <td><span class="badge badge-success">FIJO</span></td>
+                            <td>Nómina administrativa febrero</td>
+                            <td>-</td>
+                            <td><strong class="expense-amount">-$35,000</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>05/02/2026</td>
+                            <td>Servicios</td>
+                            <td><span class="badge badge-success">FIJO</span></td>
+                            <td>Luz, agua, internet oficina</td>
+                            <td>CFE, Telmex</td>
+                            <td><strong class="expense-amount">-$3,200</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>03/02/2026</td>
+                            <td>Herramientas</td>
+                            <td><span class="badge badge-info">VARIABLE</span></td>
+                            <td>Compra de herramientas</td>
+                            <td>Ferretería El Agricultor</td>
+                            <td><strong class="expense-amount">-$5,800</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>01/02/2026</td>
+                            <td>Renta</td>
+                            <td><span class="badge badge-success">FIJO</span></td>
+                            <td>Renta de hangar mensual</td>
+                            <td>Inmobiliaria Veracruz</td>
+                            <td><strong class="expense-amount">-$4,500</strong></td>
+                            <td>
+                                <button class="header-btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Editar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    <span>Mostrando 7 gastos | Total: <strong style="color: #D32F2F;">-$125,480</strong></span>
+                    <div class="pagination">
+                        <button class="page-btn active">1</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REPORTES VIEW -->
+        <div class="content-area" id="view-reportes">
+            <!-- FILTERS -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label class="filter-label">Tipo de Reporte</label>
+                    <select class="filter-select" id="report-type">
+                        <option value="mensual">Mensual</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="anual">Anual</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Periodo</label>
+                    <select class="filter-select">
+                        <option>Febrero 2026</option>
+                        <option>Enero 2026</option>
+                        <option>Diciembre 2025</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="header-btn btn-secondary">📥 Exportar Excel</button>
+                </div>
+                <div class="filter-group">
+                    <button class="header-btn btn-danger">📄 Exportar PDF</button>
+                </div>
+            </div>
+
+            <!-- REPORT SUMMARY -->
+            <div class="report-summary">
+                <div class="summary-header">📈 Reporte Mensual - Febrero 2026</div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Total Ingresos (47 bitácoras):</span>
+                    <span class="summary-value positive">$487,350.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Total Gastos:</span>
+                    <span class="summary-value negative">-$125,480.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">├─ Costo Directo (36%):</span>
+                    <span class="summary-value">-$45,200.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">├─ Variable (25%):</span>
+                    <span class="summary-value">-$30,800.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">└─ Fijo (39%):</span>
+                    <span class="summary-value">-$49,480.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">UTILIDAD NETA:</span>
+                    <span class="summary-value total">$361,870.00</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Margen de Utilidad:</span>
+                    <span class="summary-value positive">74.2%</span>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL METRICS -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📊 Desglose de Ingresos</h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div class="summary-row">
+                            <span class="summary-label">Bitácoras completadas:</span>
+                            <span class="summary-value">47</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Hectáreas trabajadas:</span>
+                            <span class="summary-value">342 ha</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Ticket promedio:</span>
+                            <span class="summary-value">$10,369</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Precio por hectárea:</span>
+                            <span class="summary-value">$1,424/ha</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Clientes únicos:</span>
+                            <span class="summary-value">38</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">📊 Análisis de Rentabilidad</h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div class="summary-row">
+                            <span class="summary-label">Margen de Contribución:</span>
+                            <span class="summary-value positive">90.7%</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Punto de equilibrio:</span>
+                            <span class="summary-value">$138,000</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Días trabajados:</span>
+                            <span class="summary-value">22</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Ingreso promedio/día:</span>
+                            <span class="summary-value">$22,152</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Vs mes anterior:</span>
+                            <span class="summary-value positive">+8.3%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP CLIENTS -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">🏆 Top 10 Clientes del Mes</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Cliente</th>
+                            <th>Localidad</th>
+                            <th>Bitácoras</th>
+                            <th>Hectáreas</th>
+                            <th>Total Facturado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🥇 1</td>
+                            <td>Pablo López Torres</td>
+                            <td>Bermejo, Veracruz</td>
+                            <td>5</td>
+                            <td>38.5</td>
+                            <td><strong>$68,250</strong></td>
+                        </tr>
+                        <tr>
+                            <td>🥈 2</td>
+                            <td>Juan González</td>
+                            <td>Los Mangos, Veracruz</td>
+                            <td>4</td>
+                            <td>28.2</td>
+                            <td><strong>$52,360</strong></td>
+                        </tr>
+                        <tr>
+                            <td>🥉 3</td>
+                            <td>María Contreras</td>
+                            <td>San Miguel, Veracruz</td>
+                            <td>3</td>
+                            <td>25.0</td>
+                            <td><strong>$45,000</strong></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Roberto Sánchez</td>
+                            <td>Playa Vicente, Veracruz</td>
+                            <td>3</td>
+                            <td>22.5</td>
+                            <td><strong>$40,500</strong></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Jorge Ramírez</td>
+                            <td>Coatzacoalcos, Veracruz</td>
+                            <td>2</td>
+                            <td>30.0</td>
+                            <td><strong>$54,000</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- USUARIOS VIEW -->
+        <div class="content-area" id="view-usuarios">
+            <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+                <div class="stat-card blue">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Usuarios</div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="stat-icon">👥</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>Personal activo</span>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Administradores</div>
+                            <div class="stat-value">2</div>
+                        </div>
+                        <div class="stat-icon">👑</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>40% del total</span>
+                    </div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Técnicos</div>
+                            <div class="stat-value">3</div>
+                        </div>
+                        <div class="stat-icon">🛠️</div>
+                    </div>
+                    <div class="stat-trend">
+                        <span>60% del total</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <button class="header-btn btn-primary">+ Nuevo Usuario</button>
+            </div>
+
+            <div class="user-card-grid">
+                <div class="user-card">
+                    <div class="user-card-avatar">RA</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">Roberto Admin</div>
+                        <div class="user-card-username">@roberto.admin</div>
+                        <span class="badge badge-admin">Administrador</span>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="icon-btn">✏️</button>
+                        <button class="icon-btn">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-card-avatar" style="background: #E3F2FD; color: #1976D2;">MC</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">María Contreras</div>
+                        <div class="user-card-username">@maria.tech</div>
+                        <span class="badge badge-tech">Técnico</span>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="icon-btn">✏️</button>
+                        <button class="icon-btn">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-card-avatar" style="background: #E3F2FD; color: #1976D2;">JG</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">Juan González</div>
+                        <div class="user-card-username">@juan.tech</div>
+                        <span class="badge badge-tech">Técnico</span>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="icon-btn">✏️</button>
+                        <button class="icon-btn">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-card-avatar" style="background: #E3F2FD; color: #1976D2;">AR</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">Ana Rodríguez</div>
+                        <div class="user-card-username">@ana.tech</div>
+                        <span class="badge badge-tech">Técnico</span>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="icon-btn">✏️</button>
+                        <button class="icon-btn">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-card-avatar">LM</div>
+                    <div class="user-card-info">
+                        <div class="user-card-name">Luis Martínez</div>
+                        <div class="user-card-username">@luis.admin</div>
+                        <span class="badge badge-admin">Administrador</span>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="icon-btn">✏️</button>
+                        <button class="icon-btn">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIGURACION VIEW -->
+        <div class="content-area" id="view-configuracion">
+            <div class="config-section">
+                <div class="config-title">⚙️ Configuración General</div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Notificaciones por Email</div>
+                        <div class="config-description">Recibir notificaciones de nuevas bitácoras</div>
+                    </div>
+                    <div class="toggle-switch active"></div>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Modo Oscuro</div>
+                        <div class="config-description">Tema oscuro para el panel</div>
+                    </div>
+                    <div class="toggle-switch"></div>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Auto-backup</div>
+                        <div class="config-description">Respaldo automático diario de datos</div>
+                    </div>
+                    <div class="toggle-switch active"></div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-title">📊 Configuración de Reportes</div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Reportes Automáticos</div>
+                        <div class="config-description">Generar reporte mensual automático</div>
+                    </div>
+                    <div class="toggle-switch active"></div>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Formato de Exportación</div>
+                        <div class="config-description">Formato predeterminado</div>
+                    </div>
+                    <select class="filter-select" style="width: 200px;">
+                        <option>Excel (.xlsx)</option>
+                        <option>PDF</option>
+                        <option>CSV</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-title">🔐 Seguridad</div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Autenticación de Dos Factores</div>
+                        <div class="config-description">Mayor seguridad para el inicio de sesión</div>
+                    </div>
+                    <div class="toggle-switch"></div>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Cambiar Contraseña</div>
+                        <div class="config-description">Actualizar contraseña de administrador</div>
+                    </div>
+                    <button class="header-btn btn-secondary">Cambiar</button>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-title">💾 Datos y Almacenamiento</div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Exportar Todos los Datos</div>
+                        <div class="config-description">Descargar backup completo del sistema</div>
+                    </div>
+                    <button class="header-btn btn-secondary">📥 Exportar</button>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Limpiar Caché</div>
+                        <div class="config-description">Eliminar datos temporales</div>
+                    </div>
+                    <button class="header-btn btn-secondary">🗑️ Limpiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showView(viewName) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked nav item
+            event.currentTarget.classList.add('active');
+            
+            // Hide all content areas
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.classList.remove('active');
+            });
+            
+            // Show selected content area
+            document.getElementById('view-' + viewName).classList.add('active');
+            
+            // Update header based on view
+            const headers = {
+                'dashboard': {
+                    title: '📊 Dashboard',
+                    subtitle: 'Febrero 2026 - Vista General del Negocio'
+                },
+                'bitacoras': {
+                    title: '📋 Bitácoras',
+                    subtitle: 'Gestión de Bitácoras de Aplicación'
+                },
+                'gastos': {
+                    title: '💰 Gastos',
+                    subtitle: 'Control de Gastos y Egresos'
+                },
+                'reportes': {
+                    title: '📈 Reportes',
+                    subtitle: 'Análisis y Reportes Financieros'
+                },
+                'usuarios': {
+                    title: '👥 Usuarios',
+                    subtitle: 'Gestión de Personal del Sistema'
+                },
+                'configuracion': {
+                    title: '⚙️ Configuración',
+                    subtitle: 'Ajustes del Sistema'
+                }
+            };
+            
+            document.getElementById('header-title').textContent = headers[viewName].title;
+            document.getElementById('header-subtitle').textContent = headers[viewName].subtitle;
+        }
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

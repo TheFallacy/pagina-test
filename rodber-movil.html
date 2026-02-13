@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodber App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2E7D32;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .mockups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .phone-mockup {
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative;
+            aspect-ratio: 9/19.5;
+            overflow: hidden;
+        }
+
+        .phone-header {
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .screen {
+            height: calc(100% - 30px);
+            background: #F5F5F5;
+            border-radius: 0 0 30px 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: #7DD3C0;
+            padding: 60px 20px 20px;
+            text-align: center;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            color: #1A1A1A;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* LOGIN SCREEN */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(135deg, #7DD3C0 0%, #4CAF50 100%);
+            padding: 30px;
+        }
+
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .login-form {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #2E7D32;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #2E7D32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #2E7D32;
+            border: 2px solid #2E7D32;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* BITÁCORAS LIST - COMPACT VIEW */
+        .bitacora-compact {
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2E7D32;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bitacora-compact:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .bitacora-compact.sin-firmas {
+            border-left-color: #FDD835;
+        }
+
+        .compact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .bitacora-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2E7D32;
+            background: #E8F5E9;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-firmada {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .status-sin-firmas {
+            background: #FFF9C4;
+            color: #F57C00;
+        }
+
+        .compact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            color: #1A1A1A;
+            font-weight: 600;
+        }
+
+        /* EXPANDED VIEW */
+        .bitacora-expanded {
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid #2E7D32;
+        }
+
+        .expanded-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #E8F5E9;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #F5F5F5;
+            font-size: 13px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: #1A1A1A;
+            text-align: right;
+        }
+
+        .aplicaciones-list {
+            background: #F1F8E9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .aplicacion-item {
+            font-size: 12px;
+            color: #555;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .aplicacion-item:last-child {
+            border-bottom: none;
+        }
+
+        .firma-preview {
+            width: 100%;
+            height: 120px;
+            background: #F5F5F5;
+            border: 2px solid #2E7D32;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            color: #2E7D32;
+            font-size: 12px;
+        }
+
+        .firma-preview.empty {
+            border-color: #FDD835;
+            border-style: dashed;
+            color: #F57C00;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-small {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-pdf {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .btn-firmas {
+            background: #1976D2;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #FF9800;
+            color: white;
+        }
+
+        /* ADMIN BADGE */
+        .admin-only-badge {
+            display: inline-block;
+            background: #FFE0B2;
+            color: #E65100;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        /* DASHBOARD */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.primary {
+            border-left: 4px solid #2E7D32;
+        }
+
+        .stat-card.secondary {
+            border-left: 4px solid #FDD835;
+        }
+
+        .stat-card.info {
+            border-left: 4px solid #1976D2;
+        }
+
+        .stat-card.warning {
+            border-left: 4px solid #FF9800;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* USER MANAGEMENT */
+        .user-card {
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #2E7D32;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .user-username {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-role-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .role-admin {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .role-tech {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        /* EXPENSE CARD */
+        .expense-card {
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #FF9800;
+        }
+
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .expense-type {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1A1A1A;
+        }
+
+        .expense-amount {
+            font-size: 16px;
+            font-weight: bold;
+            color: #D32F2F;
+        }
+
+        .expense-date {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .mockup-title {
+            text-align: center;
+            font-size: 18px;
+            color: #2E7D32;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .permission-note {
+            background: #FFF9C4;
+            border-left: 4px solid #F57C00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .permission-note strong {
+            color: #F57C00;
+        }
+
+        /* FORMULARIO */
+        .form-section {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-input {
+            margin-bottom: 12px;
+        }
+
+        .total-display {
+            background: #E8F5E9;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .total-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .total-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button class="header-btn btn-primary" onclick="window.location.href='menu.html'">
+            🔄 Regresar al menú
+        </button>
+        <h1>🚜 Rodber Apps</h1>
+        <p class="subtitle">Sistema de Gestión de Bitácoras Agrícolas | Versión: 0.0.1 | Prototipo Mobile</p>
+        <div class="mockups-grid">
+            <!-- MOCKUP 1: LOGIN CON USERNAME -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="login-container">
+                            <div class="logo-circle">
+                                <span class="logo-text">🚜</span>
+                            </div>
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h2 style="font-size: 28px; color: white; margin-bottom: 5px;">Rodber App</h2>
+                                <p style="color: rgba(255,255,255,0.9); font-size: 14px;">Sistema de Gestión Agrícola
+                                </p>
+                            </div>
+                            <div class="login-form">
+                                <div class="form-title">Iniciar Sesión</div>
+                                <div class="input-group">
+                                    <label class="input-label">👤 Usuario</label>
+                                    <input type="text" class="input-field" placeholder="honorio.admin">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">🔒 Contraseña</label>
+                                    <input type="password" class="input-field" placeholder="••••••••">
+                                </div>
+                                <button class="btn-primary">Ingresar al Sistema</button>
+                                <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #999;">
+                                    Solo para personal autorizado
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">1. Login (Username sin email)</p>
+            </div>
+
+            <!-- MOCKUP 2: LISTA COMPACTA DE BITÁCORAS -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📋 Bitácoras Rodber</h2>
+                            <p>Sistema de Gestión Agrícola</p>
+                        </div>
+                        <div class="content">
+                            <button class="btn-primary" style="margin-bottom: 15px;">+ Nueva Bitácora</button>
+
+                            <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
+                                <strong>4 registros</strong> | Toca una bitácora para ver detalles
+                            </div>
+
+                            <!-- BITÁCORA COMPACTA - CON FIRMAS -->
+                            <div class="bitacora-compact">
+                                <div class="compact-header">
+                                    <span class="bitacora-number">#0004</span>
+                                    <span class="status-badge status-firmada">✅ Firmada</span>
+                                </div>
+                                <div class="compact-info">
+                                    <div class="info-item">
+                                        <span class="info-label">📍 LOCALIDAD</span>
+                                        <span class="info-value">Playa vicente</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🌾 PREDIO</span>
+                                        <span class="info-value">Parcela Sur</span>
+                                    </div>
+                                    <div class="info-item" style="grid-column: 1 / -1;">
+                                        <span class="info-label">👤 PRODUCTOR</span>
+                                        <span class="info-value">Juan Pérez</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BITÁCORA COMPACTA - SIN FIRMAS -->
+                            <div class="bitacora-compact sin-firmas">
+                                <div class="compact-header">
+                                    <span class="bitacora-number"
+                                        style="background: #FFF9C4; color: #F57C00;">#0003</span>
+                                    <span class="status-badge status-sin-firmas">⏳ Sin Firmas</span>
+                                </div>
+                                <div class="compact-info">
+                                    <div class="info-item">
+                                        <span class="info-label">📍 LOCALIDAD</span>
+                                        <span class="info-value">Bermejo</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🌾 PREDIO</span>
+                                        <span class="info-value">Parcela Norte</span>
+                                    </div>
+                                    <div class="info-item" style="grid-column: 1 / -1;">
+                                        <span class="info-label">👤 PRODUCTOR</span>
+                                        <span class="info-value">Pablo Torres</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BITÁCORA COMPACTA - CON FIRMAS -->
+                            <div class="bitacora-compact">
+                                <div class="compact-header">
+                                    <span class="bitacora-number">#0002</span>
+                                    <span class="status-badge status-firmada">✅ Firmada</span>
+                                </div>
+                                <div class="compact-info">
+                                    <div class="info-item">
+                                        <span class="info-label">📍 LOCALIDAD</span>
+                                        <span class="info-value">Los Mangos</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🌾 PREDIO</span>
+                                        <span class="info-value">El Naranjo</span>
+                                    </div>
+                                    <div class="info-item" style="grid-column: 1 / -1;">
+                                        <span class="info-label">👤 PRODUCTOR</span>
+                                        <span class="info-value">Juan González</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BITÁCORA COMPACTA - SIN FIRMAS -->
+                            <div class="bitacora-compact sin-firmas">
+                                <div class="compact-header">
+                                    <span class="bitacora-number"
+                                        style="background: #FFF9C4; color: #F57C00;">#0001</span>
+                                    <span class="status-badge status-sin-firmas">⏳ Sin Firmas</span>
+                                </div>
+                                <div class="compact-info">
+                                    <div class="info-item">
+                                        <span class="info-label">📍 LOCALIDAD</span>
+                                        <span class="info-value">San Miguel</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🌾 PREDIO</span>
+                                        <span class="info-value">La Esperanza</span>
+                                    </div>
+                                    <div class="info-item" style="grid-column: 1 / -1;">
+                                        <span class="info-label">👤 PRODUCTOR</span>
+                                        <span class="info-value">María Contreras</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">2. Lista Compacta de Bitácoras</p>
+            </div>
+
+            <!-- MOCKUP 3: VISTA EXPANDIDA - TÉCNICO -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📋 Bitácora #0003</h2>
+                            <p>Detalles Completos</p>
+                        </div>
+                        <div class="content">
+                            <div class="permission-note">
+                                <strong>👤 Vista de Técnico:</strong> Puede agregar firmas si no existen, pero NO puede
+                                reemplazarlas.
+                            </div>
+
+                            <div class="bitacora-expanded">
+                                <!-- Información General -->
+                                <div class="expanded-section">
+                                    <div class="section-title">📅 Información General</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Fecha:</span>
+                                        <span class="detail-value">2026-02-10</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Estado:</span>
+                                        <span class="detail-value" style="color: #F57C00;">⏳ Sin Firmas</span>
+                                    </div>
+                                </div>
+
+                                <!-- Productor -->
+                                <div class="expanded-section">
+                                    <div class="section-title">👤 Productor</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Nombre:</span>
+                                        <span class="detail-value">Pablo López Torres</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Localidad:</span>
+                                        <span class="detail-value">Bermejo</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Estado:</span>
+                                        <span class="detail-value">Sinaloa</span>
+                                    </div>
+                                </div>
+
+                                <!-- Predio -->
+                                <div class="expanded-section">
+                                    <div class="section-title">🌾 Predio</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Nombre:</span>
+                                        <span class="detail-value">Parcela Norte - Panchita</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Municipio:</span>
+                                        <span class="detail-value">Playa Vicente</span>
+                                    </div>
+                                </div>
+
+                                <!-- Superficie y Costos -->
+                                <div class="expanded-section">
+                                    <div class="section-title">💰 Superficie y Costos</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Superficie:</span>
+                                        <span class="detail-value">7.5 hectáreas</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Costo/ha:</span>
+                                        <span class="detail-value">$1,800</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Total:</span>
+                                        <span class="detail-value"
+                                            style="font-size: 16px; color: #2E7D32;">$13,500</span>
+                                    </div>
+                                </div>
+
+                                <!-- Aplicaciones -->
+                                <div class="expanded-section">
+                                    <div class="section-title">🧪 Aplicaciones</div>
+                                    <div class="aplicaciones-list">
+                                        <div class="aplicacion-item">
+                                            <strong>1. Fungicida</strong> - Enable (500 ml/ha)
+                                        </div>
+                                        <div class="aplicacion-item">
+                                            <strong>2. Foliar</strong> - IMEX-4 (1 L/ha)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Firmas -->
+                                <div class="expanded-section">
+                                    <div class="section-title">✍️ Firmas Digitales</div>
+                                    <div style="margin-bottom: 12px;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 6px;">Firma del
+                                            Productor:</div>
+                                        <div class="firma-preview empty">
+                                            ❌ Sin firma registrada
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 6px;">Firma del Piloto:
+                                        </div>
+                                        <div class="firma-preview empty">
+                                            ❌ Sin firma registrada
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de Acción - TÉCNICO -->
+                                <div class="action-buttons" style="grid-template-columns: 1fr;">
+                                    <button class="btn-small btn-firmas">
+                                        ✍️ Agregar Firmas
+                                    </button>
+                                    <button class="btn-small btn-pdf">
+                                        📄 Ver PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">3. Vista Expandida (Técnico)</p>
+            </div>
+
+            <!-- MOCKUP 4: VISTA EXPANDIDA - ADMINISTRADOR -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📋 Bitácora #0004</h2>
+                            <p>Detalles Completos</p>
+                        </div>
+                        <div class="content">
+                            <div class="permission-note" style="background: #E8F5E9; border-left-color: #2E7D32;">
+                                <strong>👑 Vista de Administrador:</strong> Puede ver PDF, quitar firmas y eliminar
+                                bitácoras.
+                            </div>
+
+                            <div class="bitacora-expanded">
+                                <!-- Información Resumida -->
+                                <div class="expanded-section">
+                                    <div class="section-title">📅 Información General</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Fecha:</span>
+                                        <span class="detail-value">2026-02-10</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Estado:</span>
+                                        <span class="detail-value" style="color: #4CAF50;">✅ Firmada</span>
+                                    </div>
+                                </div>
+
+                                <div class="expanded-section">
+                                    <div class="section-title">👤 Productor & Predio</div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Productor:</span>
+                                        <span class="detail-value">Juan Pérez</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Localidad:</span>
+                                        <span class="detail-value">Playa Vicente, Veracruz</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Predio:</span>
+                                        <span class="detail-value">Parcela Sur</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Superficie:</span>
+                                        <span class="detail-value">2 hectáreas</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Total:</span>
+                                        <span class="detail-value" style="font-size: 16px; color: #2E7D32;">$16</span>
+                                    </div>
+                                </div>
+
+                                <!-- Aplicaciones -->
+                                <div class="expanded-section">
+                                    <div class="section-title">🧪 Aplicaciones</div>
+                                    <div class="aplicaciones-list">
+                                        <div class="aplicacion-item">
+                                            <strong>1. Herbicida</strong> - Pruebas
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Firmas CON CONTENIDO -->
+                                <div class="expanded-section">
+                                    <div class="section-title">✍️ Firmas Digitales</div>
+                                    <div style="margin-bottom: 12px;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 6px;">Firma del
+                                            Productor:</div>
+                                        <div class="firma-preview">
+                                            ✅ Firma registrada
+                                            <br>
+                                            <div style="margin-top: 8px; font-size: 10px;">
+                                                2026-02-10, 8:08 p.m.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 6px;">Firma del Piloto:
+                                        </div>
+                                        <div class="firma-preview">
+                                            ✅ Firma registrada
+                                            <br>
+                                            <div style="margin-top: 8px; font-size: 10px;">
+                                                2026-02-10, 8:08 p.m.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de Acción - ADMINISTRADOR -->
+                                <div class="action-buttons">
+                                    <button class="btn-small btn-pdf">
+                                        📄 Ver PDF
+                                    </button>
+                                    <button class="btn-small btn-delete">
+                                        🗑️ Quitar Firmas
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">4. Vista Expandida (Admin)</p>
+            </div>
+
+            <!-- MOCKUP 5: FORMULARIO -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📝 Nueva Bitácora</h2>
+                            <p>Complete todos los campos requeridos</p>
+                        </div>
+                        <div class="content">
+                            <!-- Fecha -->
+                            <div class="form-section">
+                                <div class="form-section-title">📅 Información General</div>
+                                <div class="form-input">
+                                    <label class="input-label">Fecha de Aplicación *</label>
+                                    <input type="date" class="input-field" value="2026-02-12">
+                                </div>
+                            </div>
+
+                            <!-- Productor -->
+                            <div class="form-section">
+                                <div class="form-section-title">👤 Datos del Productor</div>
+                                <div class="form-input">
+                                    <label class="input-label">Nombre Completo *</label>
+                                    <input type="text" class="input-field" placeholder="Ej: Juan Pérez García">
+                                </div>
+                                <div class="form-input">
+                                    <label class="input-label">Localidad *</label>
+                                    <input type="text" class="input-field" placeholder="Ej: El Manantial">
+                                </div>
+                                <div class="form-input">
+                                    <label class="input-label">Estado *</label>
+                                    <select class="input-field">
+                                        <option>Veracruz</option>
+                                        <option>Sinaloa</option>
+                                        <option>Jalisco</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Predio -->
+                            <div class="form-section">
+                                <div class="form-section-title">🌾 Datos del Predio</div>
+                                <div class="form-input">
+                                    <label class="input-label">Nombre del Predio *</label>
+                                    <input type="text" class="input-field" placeholder="Ej: Parcela Norte">
+                                </div>
+                                <div class="form-input">
+                                    <label class="input-label">Municipio *</label>
+                                    <input type="text" class="input-field" placeholder="Ej: Playa Vicente">
+                                </div>
+                            </div>
+
+                            <!-- Costos -->
+                            <div class="form-section">
+                                <div class="form-section-title">💰 Superficie y Costos</div>
+                                <div class="form-input">
+                                    <label class="input-label">Superficie (hectáreas) *</label>
+                                    <input type="number" class="input-field" placeholder="7.5">
+                                </div>
+                                <div class="form-input">
+                                    <label class="input-label">Costo por Hectárea *</label>
+                                    <input type="number" class="input-field" placeholder="1800">
+                                </div>
+                                <div class="total-display">
+                                    <div class="total-label">Total Estimado</div>
+                                    <div class="total-value">$13,500.00</div>
+                                </div>
+                            </div>
+
+                            <!-- Aplicaciones -->
+                            <div class="form-section">
+                                <div class="form-section-title">🧪 Aplicaciones</div>
+                                <div
+                                    style="background: #FFF9C4; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 12px;">
+                                    <div style="font-size: 13px; color: #666;">No hay aplicaciones registradas</div>
+                                    <button class="btn-secondary"
+                                        style="margin-top: 10px; font-size: 13px; padding: 8px;">
+                                        + Agregar primera aplicación
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div class="form-section">
+                                <div class="form-section-title">📝 Observaciones</div>
+                                <div class="form-input">
+                                    <textarea class="input-field" rows="3"
+                                        placeholder="Notas adicionales (opcional)"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px;">
+                                <button class="btn-secondary">Cancelar</button>
+                                <button class="btn-primary">Guardar Bitácora</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">5. Formulario de Bitácora</p>
+            </div>
+
+            <!-- MOCKUP 6: DASHBOARD (SOLO ADMIN) -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📊 Dashboard <span class="admin-only-badge">👑 ADMIN</span></h2>
+                            <p>Panel de Control</p>
+                        </div>
+                        <div class="content">
+                            <div class="stats-grid">
+                                <div class="stat-card primary">
+                                    <div class="stat-value">47</div>
+                                    <div class="stat-label">Bitácoras Total</div>
+                                </div>
+                                <div class="stat-card secondary">
+                                    <div class="stat-value">$487K</div>
+                                    <div class="stat-label">Ingresos</div>
+                                </div>
+                                <div class="stat-card info">
+                                    <div class="stat-value">342</div>
+                                    <div class="stat-label">Hectáreas</div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-value">$125K</div>
+                                    <div class="stat-label">Gastos</div>
+                                </div>
+                            </div>
+
+                            <div
+                                style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 16px;">
+                                <div style="font-size: 14px; font-weight: bold; color: #2E7D32; margin-bottom: 12px;">
+                                    Resumen Mensual - Febrero 2026
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Total Ingresos:</span>
+                                    <span class="detail-value" style="color: #4CAF50;">+$487,350</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Total Gastos:</span>
+                                    <span class="detail-value" style="color: #D32F2F;">-$125,480</span>
+                                </div>
+                                <div class="detail-row"
+                                    style="border-top: 2px solid #2E7D32; padding-top: 12px; margin-top: 8px;">
+                                    <span class="detail-label" style="font-size: 14px;">Utilidad:</span>
+                                    <span class="detail-value" style="font-size: 18px; color: #2E7D32;">$361,870</span>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" style="margin-bottom: 12px;">
+                                📈 Ver Reportes Completos
+                            </button>
+                            <button class="btn-secondary">
+                                📥 Exportar Datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">6. Dashboard (Solo Admin)</p>
+            </div>
+
+            <!-- MOCKUP 7: GESTIÓN DE USUARIOS (SOLO ADMIN) -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>👥 Usuarios <span class="admin-only-badge">👑 ADMIN</span></h2>
+                            <p>Gestión de Personal</p>
+                        </div>
+                        <div class="content" style="padding: 0;">
+                            <div style="padding: 16px; padding-bottom: 0;">
+                                <button class="btn-primary" style="margin-bottom: 16px;">+ Nuevo Usuario</button>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">
+                                    <strong>5 usuarios</strong> registrados
+                                </div>
+                            </div>
+
+                            <div class="user-card">
+                                <div class="user-avatar">HR</div>
+                                <div class="user-info">
+                                    <div class="user-name">Honorio Admin</div>
+                                    <div class="user-username">@honorio.admin</div>
+                                </div>
+                                <div class="user-role-badge role-admin">Admin</div>
+                            </div>
+
+                            <div class="user-card">
+                                <div class="user-avatar" style="background: #E3F2FD; color: #1976D2;">MC</div>
+                                <div class="user-info">
+                                    <div class="user-name">María Contreras</div>
+                                    <div class="user-username">@maria.tech</div>
+                                </div>
+                                <div class="user-role-badge role-tech">Técnico</div>
+                            </div>
+
+                            <div class="user-card">
+                                <div class="user-avatar" style="background: #E3F2FD; color: #1976D2;">JG</div>
+                                <div class="user-info">
+                                    <div class="user-name">Juan González</div>
+                                    <div class="user-username">@juan.tech</div>
+                                </div>
+                                <div class="user-role-badge role-tech">Técnico</div>
+                            </div>
+
+                            <div class="user-card">
+                                <div class="user-avatar" style="background: #E3F2FD; color: #1976D2;">AR</div>
+                                <div class="user-info">
+                                    <div class="user-name">Ana Rodríguez</div>
+                                    <div class="user-username">@ana.tech</div>
+                                </div>
+                                <div class="user-role-badge role-tech">Técnico</div>
+                            </div>
+
+                            <div class="user-card">
+                                <div class="user-avatar">EB</div>
+                                <div class="user-info">
+                                    <div class="user-name">Edith Admin</div>
+                                    <div class="user-username">@edith.admin</div>
+                                </div>
+                                <div class="user-role-badge role-admin">Admin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">7. Gestión de Usuarios (Admin)</p>
+            </div>
+
+            <!-- MOCKUP 8: REPORTES Y GASTOS (SOLO ADMIN) -->
+            <div>
+                <div class="phone-mockup">
+                    <div class="phone-header">
+                        <span>1:02</span>
+                        <span>📶 📡 🔋</span>
+                    </div>
+                    <div class="screen">
+                        <div class="header">
+                            <h2>📈 Reportes <span class="admin-only-badge">👑 ADMIN</span></h2>
+                            <p>Análisis Financiero</p>
+                        </div>
+                        <div class="content" style="padding: 0;">
+                            <div style="padding: 16px;">
+                                <div
+                                    style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 16px;">
+                                    <div style="font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">
+                                        Periodo</div>
+                                    <div
+                                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                                        <button class="btn-secondary"
+                                            style="padding: 8px; font-size: 12px;">Semanal</button>
+                                        <button class="btn-primary"
+                                            style="padding: 8px; font-size: 12px;">Mensual</button>
+                                        <button class="btn-secondary"
+                                            style="padding: 8px; font-size: 12px;">Anual</button>
+                                    </div>
+                                    <div style="font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 600;">Mes
+                                    </div>
+                                    <select class="input-field">
+                                        <option>Febrero 2026</option>
+                                        <option>Enero 2026</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn-primary" style="margin-bottom: 16px;">
+                                    📥 Exportar Reporte Excel
+                                </button>
+
+                                <div style="font-size: 14px; font-weight: bold; color: #2E7D32; margin-bottom: 12px;">
+                                    Gastos del Periodo
+                                </div>
+                            </div>
+
+                            <div class="expense-card">
+                                <div class="expense-header">
+                                    <span class="expense-type">Insumos / Proveedores</span>
+                                    <span class="expense-amount">-$45,200</span>
+                                </div>
+                                <div class="expense-date">05 Feb 2026 | Costo Directo</div>
+                            </div>
+
+                            <div class="expense-card" style="border-left-color: #D32F2F;">
+                                <div class="expense-header">
+                                    <span class="expense-type">Combustible</span>
+                                    <span class="expense-amount">-$18,500</span>
+                                </div>
+                                <div class="expense-date">07 Feb 2026 | Variable</div>
+                            </div>
+
+                            <div class="expense-card" style="border-left-color: #1976D2;">
+                                <div class="expense-header">
+                                    <span class="expense-type">Mantenimiento</span>
+                                    <span class="expense-amount">-$12,300</span>
+                                </div>
+                                <div class="expense-date">08 Feb 2026 | Variable</div>
+                            </div>
+
+                            <div class="expense-card" style="border-left-color: #9C27B0;">
+                                <div class="expense-header">
+                                    <span class="expense-type">Nómina</span>
+                                    <span class="expense-amount">-$35,000</span>
+                                </div>
+                                <div class="expense-date">10 Feb 2026 | Fijo</div>
+                            </div>
+
+                            <div style="padding: 16px;">
+                                <button class="btn-secondary">
+                                    + Registrar Nuevo Gasto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mockup-title">8. Reportes y Gastos (Admin)</p>
+            </div>
+        </div>
+
+        <!-- TABLA DE PERMISOS -->
+        <div
+            style="background: white; padding: 30px; border-radius: 12px; margin-top: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #2E7D32; margin-bottom: 20px; text-align: center;">🔐 Tabla de Permisos y Roles</h2>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="background: #E8F5E9;">
+                        <th style="padding: 12px; text-align: left; border: 1px solid #E0E0E0;">Funcionalidad</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #E0E0E0; color: #2E7D32;">👑
+                            Administrador</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #E0E0E0; color: #1976D2;">👤
+                            Técnico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Ver Dashboard</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Crear Bitácoras</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Ver Bitácoras</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Agregar Firmas (si no existen)</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Quitar/Reemplazar Firmas</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Generar PDF</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Ver/Generar Reportes</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Gestionar Gastos</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0;">Crear/Eliminar Usuarios</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #4CAF50;">✅</td>
+                        <td style="padding: 12px; border: 1px solid #E0E0E0; text-align: center; color: #D32F2F;">❌</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="padding: 20px; background: #E8F5E9; border-radius: 8px; border-left: 4px solid #2E7D32;">
+                    <h3 style="color: #2E7D32; margin-bottom: 10px; font-size: 16px;">👑 Administrador</h3>
+                    <ul style="color: #666; font-size: 13px; line-height: 1.8; margin-left: 20px;">
+                        <li>Control total del sistema</li>
+                        <li>Gestión financiera completa</li>
+                        <li>Gestión de usuarios (username)</li>
+                        <li>Generación de reportes</li>
+                        <li>Puede quitar firmas</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 20px; background: #E3F2FD; border-radius: 8px; border-left: 4px solid #1976D2;">
+                    <h3 style="color: #1976D2; margin-bottom: 10px; font-size: 16px;">👤 Técnico</h3>
+                    <ul style="color: #666; font-size: 13px; line-height: 1.8; margin-left: 20px;">
+                        <li>Crear y ver bitácoras</li>
+                        <li>Agregar firmas (solo si no existen)</li>
+                        <li>NO puede quitar firmas</li>
+                        <li>NO acceso a dashboard</li>
+                        <li>NO puede ver reportes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 20px; padding: 20px; background: #FFF9C4; border-radius: 8px; border-left: 4px solid #F57C00;">
+                <h3 style="color: #F57C00; margin-bottom: 10px; font-size: 16px;">ℹ️ Notas Importantes</h3>
+                <ul style="color: #666; font-size: 13px; line-height: 1.8; margin-left: 20px;">
+                    <li><strong>Clientes/Productores:</strong> NO tienen cuenta en el sistema. Solo firman cuando se les
+                        solicita.</li>
+                    <li><strong>Login:</strong> Con username (sin email). Ejemplo: @honorio.admin</li>
+                    <li><strong>Firmas:</strong> Los técnicos solo pueden agregar firmas si NO existen. Para reemplazar,
+                        un admin debe quitarlas primero.</li>
+                    <li><strong>Gastos:</strong> Se registran con tipo (Variable, Costo Directo, Fijo) y fecha.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
